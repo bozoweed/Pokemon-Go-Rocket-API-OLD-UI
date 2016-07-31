@@ -45,9 +45,10 @@ Build and Run (CTRL+F5)
 
 ## Password
 * *password* - for Google account. No need for when using PTC.
-
-## GoogleRefreshToken
-* *token* - for Google account. No need for wen using PTC. (Obsolete)
+* 
+*  if you got a bug with google login use the posswordapp generate by google
+*  https://security.google.com/settings/security/apppasswords
+*  
 
 ## DefaultLatitude
 * *12.345678* - Latitude of your location you want to use the bot in. Number between -90 and +90. Doesn't matter how many numbers stand after the comma.
