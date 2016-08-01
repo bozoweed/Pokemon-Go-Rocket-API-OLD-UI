@@ -60,7 +60,7 @@ namespace PokemonGo.RocketAPI.Window
                 var lat1 = this.latitude;
                 var lon1 = this.longitude;
 
-                var R = 600371; // km
+                var R = 6371; // km
                 var dLat = (lat2 - lat1) * Math.PI / 180;
                 var dLon = (lon2 - lon1) * Math.PI / 180;
                 lat1 = lat1 * Math.PI / 180;
