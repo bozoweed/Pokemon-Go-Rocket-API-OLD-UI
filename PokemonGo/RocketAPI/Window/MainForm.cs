@@ -290,7 +290,7 @@ namespace PokemonGo.RocketAPI.Window
                 if (ClientSettings.Recycler)
                     client.RecycleItems(client);
 
-                await Task.Delay(8000);
+                await Task.Delay(3000);
                 PrintLevel(client);
                 await ExecuteFarmingPokestopsAndPokemons(client);
 
@@ -498,7 +498,25 @@ namespace PokemonGo.RocketAPI.Window
                 }
 
                 if (ClientSettings.CatchPokemon)
+                { 
+                    
+                var PokemonHuntCount = 2;
+                var PokemonHuntDelay = 5000;
+
+                for (var i = 0; i < PokemonHuntCount; i++)
+                {
+                    ColoredConsoleWrite(Color.Yellow, "Looking for Pokemon around");
                     await ExecuteCatchAllNearbyPokemons(client);
+
+                    if (i < PokemonHuntCount-1)
+                    {
+                        ColoredConsoleWrite(Color.Yellow, "Waiting for Pokemon Spawning");
+                        await Task.Delay(PokemonHuntDelay);
+                    }
+                }
+
+                ColoredConsoleWrite(Color.DarkRed, "Nothing More Here ! Moving To Other PokeStop");
+            }
             }
             FarmingStops = false;
             if (nextPokeStopList != null)
@@ -522,7 +540,7 @@ namespace PokemonGo.RocketAPI.Window
 
                 ColoredConsoleWrite(Color.LightGreen, "Starting force unban...");
 
-                var mapObjects = await client.GetMapObjects();
+                var mapObjects = await client.GetMapObjectstounban();
                 var pokeStops = mapObjects.MapCells.SelectMany(i => i.Forts).Where(i => i.Type == FortType.Checkpoint && i.CooldownCompleteTimestampMs < DateTime.UtcNow.ToUnixTime());
 
                 await Task.Delay(10000);
