@@ -29,6 +29,9 @@ A Pokémon Go bot in C#
 ## Getting Started
 Build and Run (CTRL+F5)
 
+## Auto Force Unbann
+* * if get ban yhe bot got auto unbann and continue to farme 
+
 # Settings
 ## AuthType
 * *google* - Google login
