@@ -515,7 +515,7 @@ namespace PokemonGo.RocketAPI.Window
                     }
                 }
 
-                ColoredConsoleWrite(Color.DarkRed, "Nothing More Here ! Moving To Other PokeStop");
+                ColoredConsoleWrite(Color.OrangeRed, "Nothing More Here ! Moving To Other PokeStop");
             }
             }
             FarmingStops = false;
