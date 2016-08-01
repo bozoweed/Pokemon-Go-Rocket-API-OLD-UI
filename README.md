@@ -9,6 +9,7 @@
 A Pokémon Go bot in C#
 
 ## Features
+* Auto Force Unbann
 * PTC / Google Login
 * Get Map Objects and Inventory
 * Search for Gyms / Pokéstops / Spawns
@@ -30,7 +31,7 @@ A Pokémon Go bot in C#
 Build and Run (CTRL+F5)
 
 ## Auto Force Unbann
-* * if get ban yhe bot got auto unbann and continue to farme 
+*  if get ban yhe bot got auto unbann and continue to farme 
 
 # Settings
 ## AuthType
