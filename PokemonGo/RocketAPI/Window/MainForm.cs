@@ -46,6 +46,7 @@ namespace PokemonGo.RocketAPI.Window
         private static DateTime TimeStarted = DateTime.Now;
         public static DateTime InitSessionDateTime = DateTime.Now;
         private static string pokemonInBag = "";
+        public bool newpokestop = false;
 
         Client client;
         LocationManager locationManager;
@@ -460,6 +461,7 @@ namespace PokemonGo.RocketAPI.Window
                     break;
 
                 FarmingStops = true;
+                newpokestop = true;
 
                 double pokeStopDistance = locationManager.getDistance(pokeStop.Latitude, pokeStop.Longitude);
                 await locationManager.update(pokeStop.Latitude, pokeStop.Longitude);
@@ -482,6 +484,68 @@ namespace PokemonGo.RocketAPI.Window
 
                 if (fortSearch.ExperienceAwarded != 0)
                     TotalExperience += (fortSearch.ExperienceAwarded);
+
+                if (fortSearch.ExperienceAwarded == 0)
+                                    {
+                                       if (newpokestop)
+                                            {
+                                               if (fortInfo.Name != string.Empty)
+                                                   {
+                            bool done = false;
+                                                        foreach (var pokeStop2 in pokeStops)
+                                                            {
+                                
+                                
+                               await locationManager.update(pokeStop.Latitude, pokeStop.Longitude);
+                                
+                                
+                                                                if (fortInfo.Name != string.Empty)
+                                                                   {
+                                    ColoredConsoleWrite(Color.LightBlue, "Auto Force Unbanning");
+                                                                       for (int i = 1; i <= 50; i++)
+                                                                            {
+                                        var fortSearch2 = await client.SearchFort(pokeStop.Id, pokeStop.Latitude, pokeStop.Longitude);
+                                                                               if (fortSearch2.ExperienceAwarded == 0)
+                                                                                   {
+                                           ColoredConsoleWrite(Color.LightCyan, "Attempt: " + i);
+                                                                                    }
+                                                                               else
+                                        {
+                                           ColoredConsoleWrite(Color.LightBlue, "Fuck yes, you are now unbanned! Total attempts: " + i);
+                                           done = true;
+                                            newpokestop = false;
+                                           PokeStopOutput.Write($"");
+                                                                                        if (fortInfo.Name != string.Empty)
+                                               PokeStopOutput.Write("PokeStop: " + fortInfo.Name);
+                                                                                       if (fortSearch2.ExperienceAwarded != 0)
+                                             PokeStopOutput.Write($", XP: {fortSearch2.ExperienceAwarded}");
+                                                                                        if (fortSearch2.GemsAwarded != 0)
+                                                PokeStopOutput.Write($", Gems: {fortSearch2.GemsAwarded}");
+                                                                                       if (fortSearch2.PokemonDataEgg != null)
+                                               PokeStopOutput.Write($", Eggs: {fortSearch2.PokemonDataEgg}");
+                                                                                       if (GetFriendlyItemsString(fortSearch2.ItemsAwarded) != string.Empty)
+                                               PokeStopOutput.Write($", Items: {GetFriendlyItemsString(fortSearch2.ItemsAwarded)} ");
+                                           ColoredConsoleWrite(Color.Cyan, PokeStopOutput.ToString());
+
+                                            if (fortSearch2.ExperienceAwarded != 0)
+                                               TotalExperience += (fortSearch2.ExperienceAwarded);
+                                           
+                                            newpokestop = false;
+                                           
+                                                                                        break;
+                                                                                  }
+                                                                           }
+                                                                }
+                                
+                                                                if (!done)
+                                   ColoredConsoleWrite(Color.LightGreen, "Force unban failed, please try again.");
+                               
+                                                               break;
+                                
+                                                            }
+                                                   }
+                                            }
+                                    }
 
                 var pokeStopMapObjects = await client.GetMapObjects();
 
