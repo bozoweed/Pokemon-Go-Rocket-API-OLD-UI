@@ -501,7 +501,7 @@ namespace PokemonGo.RocketAPI.Window
                                 
                                                                 if (fortInfo.Name != string.Empty)
                                                                    {
-                                    ColoredConsoleWrite(Color.LightBlue, "Auto Force Unbanning");
+                                    ColoredConsoleWrite(Color.Red, "Auto Force Unbanning");
                                                                        for (int i = 1; i <= 50; i++)
                                                                             {
                                         var fortSearch2 = await client.SearchFort(pokeStop.Id, pokeStop.Latitude, pokeStop.Longitude);
@@ -511,7 +511,7 @@ namespace PokemonGo.RocketAPI.Window
                                                                                     }
                                                                                else
                                         {
-                                           ColoredConsoleWrite(Color.LightBlue, "Fuck yes, you are now unbanned! Total attempts: " + i);
+                                           ColoredConsoleWrite(Color.LightGreen, "Fuck yes, you are now unbanned! Total attempts: " + i);
                                            done = true;
                                             newpokestop = false;
                                            PokeStopOutput.Write($"");
