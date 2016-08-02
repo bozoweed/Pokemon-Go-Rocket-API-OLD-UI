@@ -46,7 +46,7 @@ namespace PokemonGo.RocketAPI.Window
         private static DateTime TimeStarted = DateTime.Now;
         public static DateTime InitSessionDateTime = DateTime.Now;
         private static string pokemonInBag = "";
-        public bool newpokestop = false;
+
         Client client;
         LocationManager locationManager;
         public static double GetRuntime()
@@ -305,7 +305,8 @@ namespace PokemonGo.RocketAPI.Window
                     await Task.Delay(10000);
                     CheckVersion();
                     Execute();
-                } else
+                }
+                else
                 {
                     ConsoleClear();
                     ColoredConsoleWrite(Color.Red, $"Bot successfully stopped.");
@@ -314,7 +315,7 @@ namespace PokemonGo.RocketAPI.Window
                     bot_started = false;
                 }
             }
-            catch (TaskCanceledException) { ColoredConsoleWrite(Color.Red, "Task Canceled Exception - Restarting"); if (!Stopping) Execute();}
+            catch (TaskCanceledException) { ColoredConsoleWrite(Color.Red, "Task Canceled Exception - Restarting"); if (!Stopping) Execute(); }
             catch (UriFormatException) { ColoredConsoleWrite(Color.Red, "System URI Format Exception - Restarting"); if (!Stopping) Execute(); }
             catch (ArgumentOutOfRangeException) { ColoredConsoleWrite(Color.Red, "ArgumentOutOfRangeException - Restarting"); if (!Stopping) Execute(); }
             catch (ArgumentNullException) { ColoredConsoleWrite(Color.Red, "Argument Null Refference - Restarting"); if (!Stopping) Execute(); }
@@ -459,7 +460,7 @@ namespace PokemonGo.RocketAPI.Window
                     break;
 
                 FarmingStops = true;
-                newpokestop = true;
+
                 double pokeStopDistance = locationManager.getDistance(pokeStop.Latitude, pokeStop.Longitude);
                 await locationManager.update(pokeStop.Latitude, pokeStop.Longitude);
                 var fortInfo = await client.GetFort(pokeStop.Id, pokeStop.Latitude, pokeStop.Longitude);
@@ -482,70 +483,6 @@ namespace PokemonGo.RocketAPI.Window
                 if (fortSearch.ExperienceAwarded != 0)
                     TotalExperience += (fortSearch.ExperienceAwarded);
 
-
-                if (fortSearch.ExperienceAwarded == 0)
-                {
-                    if (newpokestop)
-                    {
-                        if (fortInfo.Name != string.Empty)
-                        {
-                            bool done = false;
-                            foreach (var pokeStop2 in pokeStops)
-                            {
-
-
-                                await locationManager.update(pokeStop.Latitude, pokeStop.Longitude);
-
-                                
-                                if (fortInfo.Name != string.Empty)
-                                {
-                                    ColoredConsoleWrite(Color.LightBlue, "Auto Force Unbanning");
-                                    for (int i = 1; i <= 50; i++)
-                                    {
-                                        var fortSearch2 = await client.SearchFort(pokeStop.Id, pokeStop.Latitude, pokeStop.Longitude);
-                                        if (fortSearch2.ExperienceAwarded == 0)
-                                        {
-                                            ColoredConsoleWrite(Color.LightCyan, "Attempt: " + i);
-                                        }
-                                        else
-                                        {
-                                            ColoredConsoleWrite(Color.LightBlue, "Fuck yes, you are now unbanned! Total attempts: " + i);
-                                            done = true;
-                                            newpokestop = false;
-                                            PokeStopOutput.Write($"");
-                                            if (fortInfo.Name != string.Empty)
-                                                PokeStopOutput.Write("PokeStop: " + fortInfo.Name);
-                                            if (fortSearch2.ExperienceAwarded != 0)
-                                                PokeStopOutput.Write($", XP: {fortSearch2.ExperienceAwarded}");
-                                            if (fortSearch2.GemsAwarded != 0)
-                                                PokeStopOutput.Write($", Gems: {fortSearch2.GemsAwarded}");
-                                            if (fortSearch2.PokemonDataEgg != null)
-                                                PokeStopOutput.Write($", Eggs: {fortSearch2.PokemonDataEgg}");
-                                            if (GetFriendlyItemsString(fortSearch2.ItemsAwarded) != string.Empty)
-                                                PokeStopOutput.Write($", Items: {GetFriendlyItemsString(fortSearch2.ItemsAwarded)} ");
-                                            ColoredConsoleWrite(Color.Cyan, PokeStopOutput.ToString());
-
-                                            if (fortSearch2.ExperienceAwarded != 0)
-                                                TotalExperience += (fortSearch2.ExperienceAwarded);
-
-                                            newpokestop = false;
-
-                                            break;
-                                        }
-                                    }
-                                }
-
-                                if (!done)
-                                    ColoredConsoleWrite(Color.LightGreen, "Force unban failed, please try again.");
-
-                                break;
-
-                            }
-                        }
-                    }
-                }
-
-
                 var pokeStopMapObjects = await client.GetMapObjects();
 
                 /* Gets all pokeStops near this pokeStop which are not in the set of pokeStops being currently
@@ -565,23 +502,22 @@ namespace PokemonGo.RocketAPI.Window
 
                 if (ClientSettings.CatchPokemon)
                 {
-                   
-                   
-                        var PokemonHuntCount = 2;
-                        var PokemonHuntDelay = 5000;
 
-                        for (var i = 0; i < PokemonHuntCount; i++)
-                        {
-                        
+
+                    var PokemonHuntCount = 2;
+                    var PokemonHuntDelay = 5000;
+
+                    for (var i = 0; i < PokemonHuntCount; i++)
+                    {
+                        pokemoncatched = 0;
                         ColoredConsoleWrite(Color.Yellow, "Looking for Pokemon around");
-                            await ExecuteCatchAllNearbyPokemons(client);
+                        await ExecuteCatchAllNearbyPokemons(client);
 
-                            if (i < PokemonHuntCount - 1)
-                            {
-                            pokemoncatched = 0;
+                        if (i < PokemonHuntCount - 1)
+                        {
                             ColoredConsoleWrite(Color.Yellow, "Waiting for Pokemon Spawning");
-                                await Task.Delay(PokemonHuntDelay);
-                            }
+                            await Task.Delay(PokemonHuntDelay);
+                        }
                         if (pokemoncatched != 0)
                         {
                             pokemoncatched = 0;
@@ -625,13 +561,13 @@ namespace PokemonGo.RocketAPI.Window
                             await ExecuteCatchAllNearbyPokemons(client);
                         }
                     }
-                 
-                    
+
+
 
                     ColoredConsoleWrite(Color.OrangeRed, "Nothing More Here ! Moving To Other PokeStop");
-                    }
-                
                 }
+
+            }
 
             FarmingStops = false;
             if (nextPokeStopList != null)
@@ -987,23 +923,23 @@ namespace PokemonGo.RocketAPI.Window
             return (DateTime.Now - InitSessionDateTime).ToString(@"dd\.hh\:mm\:ss");
         }
 
-       
+
         public async Task ConsoleLevelTitle(string Username, Client client)
         {
             var inventory = await client.GetInventory();
             var items = inventory.InventoryDelta.InventoryItems.Select(i => i.InventoryItemData?.Item)
                        .Where(p => p != null && p?.Count > 1).OrderByDescending(key => key.Item_);
             int counter = 0;
-                        foreach (Item item in items)
-                           {
+            foreach (Item item in items)
+            {
                 ListViewItem lvi = new ListViewItem(Convert.ToString((AllEnum.ItemId)item.Item_));
-               lvi.Tag = item;
-                      counter += item.Count;
-               lvi.SubItems.Add(item.Count.ToString());
-                           }
-            var pokemonInBag = " | Items : " + counter.ToString() ;
-             string pokemonInBagc = "";
-        var stats = inventory.InventoryDelta.InventoryItems.Select(i => i.InventoryItemData?.PlayerStats).ToArray();
+                lvi.Tag = item;
+                counter += item.Count;
+                lvi.SubItems.Add(item.Count.ToString());
+            }
+            var pokemonInBag = " | Items : " + counter.ToString();
+            string pokemonInBagc = "";
+            var stats = inventory.InventoryDelta.InventoryItems.Select(i => i.InventoryItemData?.PlayerStats).ToArray();
             var profile = await client.GetProfile();
             var pokemons =
                     inventory.InventoryDelta.InventoryItems
@@ -1040,7 +976,7 @@ namespace PokemonGo.RocketAPI.Window
                     SetStatusText(string.Format(profile.Profile.Username + " | Level: {0:0} - ({2:0} / {3:0}) | Runtime {1} | Stardust: {4:0}", v.Level, _getSessionRuntimeInTimeFormat(), (v.Experience - v.PrevLevelXp - XpDiff), (v.NextLevelXp - v.PrevLevelXp - XpDiff), profile.Profile.Currency.ToArray()[1].Amount) + " | XP/Hour: " + Math.Round(TotalExperience / GetRuntime()) + " | Pokemon/Hour: " + Math.Round(TotalPokemon / GetRuntime()) + " | NextLevel in: " + hoursLeft + ":" + minutesLeft + ":" + secondsLeft + pokemonInBag + pokemonInBagc);
                 }
             await Task.Delay(1000);
-            ConsoleLevelTitle(Username,client);
+            ConsoleLevelTitle(Username, client);
         }
 
 
@@ -1168,13 +1104,15 @@ namespace PokemonGo.RocketAPI.Window
                         ColoredConsoleWrite(Color.Red, $"Unhandled exception: {ex}");
                     }
                 });
-            } else
+            }
+            else
             {
                 if (!ForceUnbanning)
                 {
                     Stopping = true;
                     ColoredConsoleWrite(Color.Red, $"Stopping the bot.. Waiting for the last action to be complete.");
-                } else
+                }
+                else
                 {
                     ColoredConsoleWrite(Color.Red, $"An action is in play, please wait until it's done.");
                 }
